@@ -33,19 +33,40 @@ async function run() {
 
         // all colection
         const userCollection = client.db('TaskManagementProject').collection('user')
+        const taskCollection = client.db('TaskManagementProject').collection('task')
 
-        // create api for posting user data
+        // create api for user data-==================================
         app.post('/user', async (req, res) => {
             const user = req.body;
             const result = await userCollection.insertOne(user);
             res.send(result);
         })
-        // create api for getting all user data
+        
         app.get('/user', async (req, res) => {
             const participet = req.body;
             const result = await userCollection.find(participet).toArray();
             res.send(result);
         })
+
+         // create api for Added Task data======================================
+         app.post('/task', async (req, res) => {
+            const task = req.body;
+            const result = await taskCollection.insertOne(task);
+            res.send(result);
+        })
+        
+        app.get('/task', async (req, res) => {
+            const participet = req.body;
+            const result = await taskCollection.find(participet).toArray();
+            res.send(result);
+        })
+
+        app.get('/task/email/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email };
+            const task = await taskCollection.find(query).toArray();
+            res.send(task)
+          })
 
 
     } finally {
